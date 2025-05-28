@@ -116,16 +116,18 @@ REST API (ASP.NET Core Web API + SQL Server)
 
 Backend (Web API)
 
-cd src/Backend
 
-dotnet ef database update
+-cd src/Backend
 
-dotnet run
+-dotnet ef database update
+
+-dotnet run
 
 Mobile App
 
-Open BudgetWise.sln in Rider or Visual Studio 2022+
 
-In appsettings.json, set ApiBaseUrl to your API URL
+-Open BudgetWise.sln in Rider or Visual Studio 2022+
 
-Deploy to Android/iOS emulator or physical device
+-In appsettings.json, set ApiBaseUrl to your API URL
+
+-Deploy to Android/iOS emulator or physical device
