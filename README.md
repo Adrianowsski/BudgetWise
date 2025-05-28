@@ -102,13 +102,30 @@ It works offline-first with seamless synchronization to a custom **ASP.NET Core 
 
 ---
 
-## 📐 Architecture Diagram
+## ⚙️ Installation & Setup
 
-┌────────────────────────────────────────────────┐
-│ Mobile App (.NET MAUI + Blazor / MVVM / DI) │
-│ • Razor Pages: Login, Dashboard, Transactions,│
-│ Budgets, Goals, Reminders, Settings │
-│ • ViewModels & Services (ApiService, AuthSvc)│
-└────────────────────────────────────────────────┘
-▲ │
-│ ▼
+REST API (ASP.NET Core Web API + SQL Server)
+
+1. **Clone repository**
+2. 
+   ```bash
+   
+   git clone https://github.com/YourUsername/BudgetWise.git
+   
+   cd BudgetWise
+
+Backend (Web API)
+
+cd src/Backend
+
+dotnet ef database update
+
+dotnet run
+
+Mobile App
+
+Open BudgetWise.sln in Rider or Visual Studio 2022+
+
+In appsettings.json, set ApiBaseUrl to your API URL
+
+Deploy to Android/iOS emulator or physical device
