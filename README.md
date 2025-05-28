@@ -104,3 +104,11 @@ It works offline-first with seamless synchronization to a custom **ASP.NET Core 
 
 ## 📐 Architecture Diagram
 
+┌────────────────────────────────────────────────┐
+│ Mobile App (.NET MAUI + Blazor / MVVM / DI) │
+│ • Razor Pages: Login, Dashboard, Transactions,│
+│ Budgets, Goals, Reminders, Settings │
+│ • ViewModels & Services (ApiService, AuthSvc)│
+└────────────────────────────────────────────────┘
+▲ │
+│ ▼
