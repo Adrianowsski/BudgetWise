@@ -131,3 +131,15 @@ Mobile App
 -In appsettings.json, set ApiBaseUrl to your API URL
 
 -Deploy to Android/iOS emulator or physical device
+
+
+## 🔐 Pre-Authentication Screens
+
+Before users can access any financial data, **BudgetWise** presents a clean, welcoming interface that guides them through authentication. Below are the key “pre-login” screens to include in your README or portfolio:
+
+| # | Screenshot                        | Filename                | Description                                                                                 |
+| - | --------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------- |
+| 1 | ![Navigation Drawer (Logged Out)](assets/screenshots/prelogin-drawer.png) | `prelogin-drawer.png`   | **Navigation Drawer**<br>Collapsed side menu on the welcome screen. Users can choose **Login** or **Register** from here. The hamburger icon in the top-right corner toggles this drawer on any pre-authentication page. |
+| 2 | ![Login Screen](assets/screenshots/login.png)           | `login.png`             | **Login**<br>A card-centered form with fields for **Email** and **Password**, plus a prominent **Login** button. Below, a link invites new users to register. |
+| 3 | ![Registration Screen](assets/screenshots/register.png) | `register.png`          | **Register**<br>The sign-up form collects **Email**, **Password**, and **Confirm Password**. A full-width **Register** button appears below the inputs, with a link to return to the login page. |
+| 4 | ![Invalid Credentials Error](assets/screenshots/login-error.png) | `login-error.png`       | **Error State**<br>If authentication fails, a red alert banner (“Invalid credentials.”) appears above the form fields, helping users quickly correct typos or reset their password. |
