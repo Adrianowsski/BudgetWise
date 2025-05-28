@@ -143,3 +143,18 @@ Before users can access any financial data, **BudgetWise** presents a clean, wel
 | 2 | ![Login Screen](assets/screenshots/login.png)           | `login.png`             | **Login**<br>A card-centered form with fields for **Email** and **Password**, plus a prominent **Login** button. Below, a link invites new users to register. |
 | 3 | ![Registration Screen](assets/screenshots/register.png) | `register.png`          | **Register**<br>The sign-up form collects **Email**, **Password**, and **Confirm Password**. A full-width **Register** button appears below the inputs, with a link to return to the login page. |
 | 4 | ![Invalid Credentials Error](assets/screenshots/login-error.png) | `login-error.png`       | **Error State**<br>If authentication fails, a red alert banner (“Invalid credentials.”) appears above the form fields, helping users quickly correct typos or reset their password. |
+
+
+## 📊 Dashboard Overview
+
+Once authenticated, users land on the **Dashboard**, which gives an at-a-glance summary of their finances. Include the following screenshots in your README under `assets/screenshots/`:
+
+| #  | Screenshot                                          | Filename                     | Description                                                                                         |
+| -- | --------------------------------------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------- |
+| 1  | ![Summary Cards](assets/screenshots/dashboard-summary.png) | `dashboard-summary.png`      | **Summary Cards**<br>Displays key metrics: Total Expenses, Total Income, Monthly Subscriptions (“Subs/mo.”), and Current Balance. |
+| 2  | ![Income vs. Expenses Chart](assets/screenshots/chart-line.png) | `chart-line.png`             | **Income vs. Expenses**<br>A line chart for the current month, with green for income and red for expenses, plotted by day. |
+| 3  | ![Expenses by Category Pie Chart](assets/screenshots/chart-pie.png) | `chart-pie.png`              | **Expenses by Category**<br>A pie chart showing the share of spending in each category (Food, Transport, Entertainment, Bills, Education). |
+| 4  | ![Subscriptions & Reminders](assets/screenshots/subscriptions.png) | `subscriptions.png`          | **Subscriptions & Reminders**<br>Lists active recurring subscriptions (e.g. Netflix, Gym, Spotify) and upcoming local notification reminders. |
+
+> **Tip:** Use clear, descriptive filenames and include alt text so your README is both visually appealing and accessible.
+
