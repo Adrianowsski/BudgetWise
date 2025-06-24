@@ -1,225 +1,212 @@
-# BudgetWise
-Personal Finance Manager (​.NET MAUI + Blazor)
+[![.NET](https://img.shields.io/badge/.NET-8.0-purple)](https://dotnet.microsoft.com/) [![MAUI](https://img.shields.io/badge/.NET_MAUI-Cross--Platform-brightgreen)](https://learn.microsoft.com/dotnet/maui) [![Blazor](https://img.shields.io/badge/Blazor-Hybrid-9cf)](https://learn.microsoft.com/aspnet/core/blazor/hybrid) [![Build Status](https://img.shields.io/github/actions/workflow/status/yourusername/BudgetWise/ci.yml?branch=main)](https://github.com/yourusername/BudgetWise/actions) [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-📋 Project Overview
+# 💰 BudgetWise
 
-**BudgetWise** is a cross-platform mobile application built with **.NET MAUI** and **Blazor** that helps users:
+A **cross‑platform** personal finance manager built with **.NET MAUI + Blazor Hybrid**. Track expenses & income, set budgets, manage subscriptions, and hit your savings goals — online *or* completely offline with seamless API sync.
 
-- Track incomes and expenses
-  
-- Categorize transactions
+---
 
-- Set and monitor monthly budgets
-  
-- Plan and measure savings goals
-  
-- Manage recurring subscriptions
-  
-- Receive local reminders
+## 📌 Table of Contents
 
-It works offline-first with seamless synchronization to a custom **ASP.NET Core Web API** backed by **SQL Server**.
+* [🚀 Key Features](#🚀-key-features)
+* [🛠 Tech Stack](#🛠-tech-stack)
+* [🏗 Project Structure](#🏗-project-structure)
+* [⚙️ Installation & Setup](#⚙️-installation--setup)
+
+  * [Backend (Web API)](#backend-web-api)
+  * [Mobile App](#mobile-app)
+* [▶️ Running the App](#▶️-running-the-app)
+* [📸 Screenshots](#📸-screenshots)
+* [📄 License](#📄-license)
+
+---
 
 ## 🚀 Key Features
 
-- **Authentication**
-  
-  Sign up, log in, and log out using ASP.NET Core Identity with JWT (IdentityServer4)
-
-- **Dashboard**
-    
-  - Summary cards: Total Expenses, Total Income, Current Balance, Monthly Subscriptions
-     
-  - Line chart: “Income vs. Expenses” for the current month
-      
-  - Pie chart: “Expenses by Category”
-
-- **Transactions CRUD**
-  
-  - **Expenses** and **Incomes** lists with filtering and sorting
-     
-  - Add/Edit modals capturing:
-     
-    - Description, Amount, Currency, Date
-        
-    - Category (Food, Transport, Education, etc.)
-       
-    - Payment Method (Credit Card, Bank Transfer, Mobile Payment)
-      
-    - Income Type (Salary, Bonus, Other)
-
-- **Monthly Budgets**
-  
-  Define per-category spending limits and track usage
-
-- **Custom Categories & Types**
-    
-  - Create and edit expense categories (with emoji icons)
-      
-  - Define income types with descriptions
-
-- **Savings Goals**
-    
-  Set target amounts with deadlines and view progress
-
-- **Subscriptions & Reminders**
-  
-  - Manage recurring subscriptions (Netflix, Gym, Spotify…)
-     
-  - Schedule local notifications for upcoming payments or tasks
-
-- **Offline-First & Sync**
-   
-  - Local caching with SecureStorage and Preferences
-    
-  - Retry and circuit-breaker policies (Polly)
-      
-  - Sync to RESTful Web API (Entity Framework Core, SQL Server)
-
-- **Clean Architecture & Patterns**
-  
-  - MVVM (CommunityToolkit.Mvvm)
-      
-  - Dependency Injection (Microsoft.Extensions.DependencyInjection)
-      
-  - MessagingCenter for event-driven updates
-    
-  - Behaviors & Triggers for UI enhancements
+* **Authentication**
+  ASP.NET Core Identity + IdentityServer4 (JWT) for secure sign‑up / login.
+* **Dashboard**
+  Summary KPI cards, *Income vs Expenses* line chart, category pie chart, active subscriptions.
+* **Transactions CRUD**
+  Filterable, sortable *Expenses* & *Incomes* with rich add/edit modals.
+* **Monthly Budgets**
+  Per‑category limits with live usage bars.
+* **Custom Categories & Types**
+  User‑defined expense categories (with emoji) & income types.
+* **Savings Goals**
+  Target amounts + deadlines, progress visualisation.
+* **Subscriptions & Reminders**
+  Manage recurring charges and receive local notifications.
+* **Offline‑First & Sync**
+  SecureStorage caching, Polly retry/circuit‑breaker, RESTful sync to SQL‑backed API.
+* **Clean Architecture**
+  MVVM, DI, Blazor components, Behaviours, MessagingCenter.
 
 ---
 
 ## 🛠 Tech Stack
 
-| Layer            | Technology / Library                          |
-| ---------------- | --------------------------------------------- |
-| **Mobile UI**    | .NET MAUI + Blazor (Razor), C#               |
-| **State Management & DI** | CommunityToolkit.Mvvm, DI Container    |
-| **Charts & Icons** | Microcharts, FontAwesome / MaterialIcons    |
-| **Local Storage** | SecureStorage, Preferences                    |
-| **Web API**      | ASP.NET Core 9, Entity Framework Core, SQL Server |
-| **Authentication** | ASP.NET Core Identity, IdentityServer4, JWT  |
-| **Networking**   | HttpClient, Polly (retry & circuit breaker)   |
-| **Testing**      | xUnit, Moq                                    |
+| Layer              | Technology / Library                              |
+| ------------------ | ------------------------------------------------- |
+| **Mobile UI**      | .NET MAUI + Blazor Hybrid, C#                     |
+| **State & DI**     | CommunityToolkit.Mvvm, Microsoft Extensions DI    |
+| **Charts & Icons** | Microcharts, FontAwesome / Material Icons         |
+| **Storage**        | SecureStorage, Preferences                        |
+| **Backend API**    | ASP.NET Core 9 + EF Core 9, SQL Server            |
+| **Auth**           | IdentityServer4, ASP.NET Core Identity, JWT       |
+| **Networking**     | HttpClientFactory + Polly                         |
+| **Testing**        | xUnit, Moq, FluentAssertions                      |
+| **CI/CD**          | GitHub Actions (Android & iOS build, tests, lint) |
 
 ---
 
-## ⚙️ Installation & Setup
+## 🏗 Project Structure
 
-REST API (ASP.NET Core Web API + SQL Server)
-
-1. **Clone repository**
-2. 
-   ```bash
-   
-   git clone https://github.com/YourUsername/BudgetWise.git
-   
-   cd BudgetWise
-
-Backend (Web API)
-
-
--cd src/Backend
-
--dotnet ef database update
-
--dotnet run
-
-Mobile App
-
-
--Open BudgetWise.sln in Rider or Visual Studio 2022+
-
--In appsettings.json, set ApiBaseUrl to your API URL
-
--Deploy to Android/iOS emulator or physical device
-
-
-## 🗂️ Screenshots Overview
-
-Below is a full breakdown of all views and components in **BudgetWise**, organized by feature area. Store images under `assets/screenshots/` and reference them by the given filenames.
+```text
+BudgetWise.sln
+│
+├─ src/
+│  ├─ Mobile/                       # .NET MAUI Blazor app
+│  │   ├─ BudgetWise.Mobile/        # UI, ViewModels, services
+│  │   └─ BudgetWise.Mobile.Tests/  # UI tests
+│  └─ Backend/                      # ASP.NET Core 9 Web API
+│      ├─ BudgetWise.Api/
+│      └─ BudgetWise.Infrastructure/ # EF Core migrations & seeders
+└─ build/                           # GitHub Actions & Docker files
+```
 
 ---
 
-### 1. Pre-Authentication
+## ⚙️ Installation & Setup
 
-| # | Screenshot                                             | Filename                    | Description                                                        |
-| - | ------------------------------------------------------ | --------------------------- | ------------------------------------------------------------------ |
-| 1 | ![Drawer - Logged Out](assets/screenshots/prelogin-drawer.png) | `prelogin-drawer.png`       | Side menu on welcome screen, with **Login** / **Register** options |
-| 2 | ![Login Form](assets/screenshots/login.png)            | `login.png`                 | Email & password form, plus link to registration                   |
-| 3 | ![Register Form](assets/screenshots/register.png)      | `register.png`              | New account form: Email, Password, Confirm Password                |
-| 4 | ![Login Error](assets/screenshots/login-error.png)     | `login-error.png`           | Error banner “Invalid credentials” on failed login                 |
+> **Tip:** The solution runs fully offline. Start the API first, then the mobile app.
+
+### Backend (Web API)
+
+```bash
+# Clone repository
+git clone https://github.com/YourUsername/BudgetWise.git
+cd BudgetWise/src/Backend
+
+# Restore & build
+dotnet restore
+dotnet build -c Release
+
+# Apply migrations & seed demo data
+dotnet ef database update
+
+# Run API (https://localhost:5001)
+dotnet run -c Release
+```
+
+Connection string sits in **appsettings.json**; default is `(localdb)\\MSSQLLocalDB`.
+
+### Mobile App
+
+```bash
+# From repo root
+cd src/Mobile/BudgetWise.Mobile
+
+# Restore & build
+dotnet restore
+dotnet build -f net8.0-android    # or net8.0-ios
+
+# Update API base URL
+#  📄 appsettings.Development.json → "ApiBaseUrl": "https://10.0.2.2:5001"
+
+# Deploy
+#  Android Emulator:      dotnet maui deploy -f net8.0-android
+#  iOS Simulator (macOS): dotnet maui deploy -f net8.0-ios
+```
+
+> **Visual Studio 2022** automatically handles device selection & hot reload.
 
 ---
+
+## ▶️ Running the App
+
+1. **Start API** (`https://localhost:5001`).
+2. **Launch Mobile** on Android/iOS/Windows.
+3. **Register** a new account → log in.
+4. Add transactions, budgets & goals — all data syncs once the device is online again.
+
+---
+
+## 📸 Screenshots
+
+> Images live in `assets/screenshots/`. Ensure filenames match.
+
+### 1. Pre‑Authentication
+
+| # | Screenshot                                  | Description                |
+| - | ------------------------------------------- | -------------------------- |
+| 1 | ![](assets/screenshots/prelogin-drawer.png) | Drawer (logged out)        |
+| 2 | ![](assets/screenshots/login.png)           | Login form                 |
+| 3 | ![](assets/screenshots/register.png)        | Register form              |
+| 4 | ![](assets/screenshots/login-error.png)     | Invalid credentials banner |
 
 ### 2. Dashboard
 
-| # | Screenshot                                          | Filename                     | Description                                                                                       |
-| - | --------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------- |
-| 5 | ![Summary Cards](assets/screenshots/dashboard-summary.png) | `dashboard-summary.png`      | Cards showing Total Expenses, Total Income, Subs/mo., Balance                                      |
-| 6 | ![Income vs Expenses](assets/screenshots/chart-line.png)   | `chart-line.png`             | Line chart (green = income, red = expenses) for current month                                      |
-| 7 | ![Expenses by Category](assets/screenshots/chart-pie.png)  | `chart-pie.png`              | Pie chart breakdown of expense categories                                                          |
-| 8 | ![Subscriptions & Reminders](assets/screenshots/subscriptions.png) | `subscriptions.png`          | Lists recurring subscriptions and upcoming local reminders                                         |
+| # | Screenshot                                    | Description               |
+| - | --------------------------------------------- | ------------------------- |
+| 5 | ![](assets/screenshots/dashboard-summary.png) | KPI summary cards         |
+| 6 | ![](assets/screenshots/chart-line.png)        | Income vs Expenses chart  |
+| 7 | ![](assets/screenshots/chart-pie.png)         | Expenses by category pie  |
+| 8 | ![](assets/screenshots/subscriptions.png)     | Subscriptions & reminders |
 
----
+### 3. Transactions
 
-### 3. Transactions (Expenses & Incomes)
-
-| #  | Screenshot                                    | Filename                       | Description                                                                                 |
-| -- | --------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------- |
-| 9  | ![Expenses List Default](assets/screenshots/expenses-list-default.png) | `expenses-list-default.png`     | Expense entries with Description, Amount, Date, Category, Payment Method, edit/delete icons |
-| 10 | ![Filtered Expenses](assets/screenshots/expenses-list-filter.png)     | `expenses-list-filter.png`      | Filter bar applied (e.g. “Taxi”)                                                             |
-| 11 | ![Sorted Expenses](assets/screenshots/expenses-list-sort.png)         | `expenses-list-sort.png`        | Sorting by Amount                                                                            |
-| 12 | ![Add Expense Modal](assets/screenshots/add-expense-modal.png)        | `add-expense-modal.png`         | Modal for creating a new expense (all fields)                                               |
-| 13 | ![Incomes List](assets/screenshots/incomes-list.png)                  | `incomes-list.png`              | Income entries with Source, Amount, Date, Type                                               |
-| 14 | ![Add Income Modal](assets/screenshots/add-income-modal.png)          | `add-income-modal.png`          | Modal for adding an income source                                                            |
-| 15 | ![Edit Income Modal](assets/screenshots/edit-income-modal.png)        | `edit-income-modal.png`         | Modal for editing existing income entries                                                    |
-
----
+| #  | Screenshot                                        | Description       |
+| -- | ------------------------------------------------- | ----------------- |
+| 9  | ![](assets/screenshots/expenses-list-default.png) | Expenses list     |
+| 10 | ![](assets/screenshots/expenses-list-filter.png)  | Filtered expenses |
+| 11 | ![](assets/screenshots/expenses-list-sort.png)    | Sorted expenses   |
+| 12 | ![](assets/screenshots/add-expense-modal.png)     | Add expense modal |
+| 13 | ![](assets/screenshots/incomes-list.png)          | Incomes list      |
+| 14 | ![](assets/screenshots/add-income-modal.png)      | Add income modal  |
+| 15 | ![](assets/screenshots/edit-income-modal.png)     | Edit income modal |
 
 ### 4. Monthly Budgets
 
-| #  | Screenshot                            | Filename                   | Description                                           |
-| -- | ------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| 16 | ![Budgets List](assets/screenshots/budgets-list.png) | `budgets-list.png`         | List of per-category budgets (Total, Month, Category) |
-
----
+| #  | Screenshot                               | Description          |
+| -- | ---------------------------------------- | -------------------- |
+| 16 | ![](assets/screenshots/budgets-list.png) | Budgets per category |
 
 ### 5. Categories & Types
 
-| #  | Screenshot                                | Filename               | Description                                                 |
-| -- | ----------------------------------------- | ---------------------- | ----------------------------------------------------------- |
-| 17 | ![Expense Categories](assets/screenshots/categories.png) | `categories.png`        | Manage expense categories (Name + Emoji icon)               |
-| 18 | ![Income Types](assets/screenshots/income-types.png)    | `income-types.png`      | Define income types with descriptions                       |
-
----
+| #  | Screenshot                               | Description                |
+| -- | ---------------------------------------- | -------------------------- |
+| 17 | ![](assets/screenshots/categories.png)   | Expense categories manager |
+| 18 | ![](assets/screenshots/income-types.png) | Income types manager       |
 
 ### 6. Goals & Reminders
 
-| #  | Screenshot                                | Filename                 | Description                                         |
-| -- | ----------------------------------------- | ------------------------ | --------------------------------------------------- |
-| 19 | ![Saving Goals](assets/screenshots/goals.png)     | `goals.png`              | List of savings targets with Title, Target, Deadline |
-| 20 | ![Reminders List](assets/screenshots/reminders.png) | `reminders.png`          | Upcoming local notifications for user-defined tasks  |
-
----
+| #  | Screenshot                            | Description        |
+| -- | ------------------------------------- | ------------------ |
+| 19 | ![](assets/screenshots/goals.png)     | Saving goals list  |
+| 20 | ![](assets/screenshots/reminders.png) | Upcoming reminders |
 
 ### 7. Subscriptions & Payment Methods
 
-| #  | Screenshot                                        | Filename                      | Description                                              |
-| -- | ------------------------------------------------- | ----------------------------- | -------------------------------------------------------- |
-| 21 | ![Subscriptions](assets/screenshots/subscriptions-list.png) | `subscriptions-list.png`      | Recurring subscriptions (Title, Amount, Frequency)       |
-| 22 | ![Payment Methods](assets/screenshots/payment-methods.png)  | `payment-methods.png`         | Configurable payment methods (Name, Type, Provider)      |
-
----
+| #  | Screenshot                                     | Description             |
+| -- | ---------------------------------------------- | ----------------------- |
+| 21 | ![](assets/screenshots/subscriptions-list.png) | Subscriptions list      |
+| 22 | ![](assets/screenshots/payment-methods.png)    | Payment methods curator |
 
 ### 8. Selectors & Navigation
 
-| #  | Screenshot                                             | Filename                       | Description                                                    |
-| -- | ------------------------------------------------------ | ------------------------------ | -------------------------------------------------------------- |
-| 23 | ![Category Selector](assets/screenshots/select-category.png) | `select-category.png`          | Native modal to choose an expense category                     |
-| 24 | ![Method Selector](assets/screenshots/select-method.png)     | `select-method.png`            | Native modal to choose a payment method                        |
-| 25 | ![Main Navigation Drawer](assets/screenshots/main-drawer.png) | `main-drawer.png`              | Full app menu after login, highlighting **Expenses** section    |
+| #  | Screenshot                                  | Description             |
+| -- | ------------------------------------------- | ----------------------- |
+| 23 | ![](assets/screenshots/select-category.png) | Category selector       |
+| 24 | ![](assets/screenshots/select-method.png)   | Payment method selector |
+| 25 | ![](assets/screenshots/main-drawer.png)     | Main navigation drawer  |
 
 ---
 
+## 📄 License
 
+© 2025 – Released under the [MIT License](LICENSE).
 
+---
 
+*Update badges, URLs & connection strings to your environment before pushing to GitHub.*
