@@ -1,0 +1,12 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.log
+*.db
+*.db-shm
+*.db-wal
+appsettings.*.json
+*.keystore
+*.pfx
