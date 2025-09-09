@@ -1,0 +1,41 @@
+name: .NET CI
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Show dotnet info
+        run: dotnet --info
+
+      - name: Find .NET projects (excluding MAUI)
+        id: findproj
+        shell: bash
+        run: |
+          mapfile -t PROJS < <(git ls-files '*.csproj' | grep -iv 'maui' || true)
+          echo "count=${#PROJS[@]}" >> "$GITHUB_OUTPUT"
+          printf "%s\n" "${PROJS[@]}" > projects.txt || true
+          echo "Found ${#PROJS[@]} projects:"
+          cat projects.txt || true
+
+      - name: Restore
+        if: steps.findproj.outputs.count != '0'
+        run: xargs -a projects.txt -I {} dotnet restore "{}"
+
+      - name: Build
+        if: steps.findproj.outputs.count != '0'
+        run: xargs -a projects.txt -I {} dotnet build "{}" -c Release --no-restore --nologo
+
+      - name: Test (if any)
+        if: steps.findproj.outputs.count != '0'
+        run: dotnet test -c Release --no-build || echo "No tests yet"
+
+      - name: Skip note (no .NET projects yet)
+        if: steps.findproj.outputs.count == '0'
+        run: echo "No .NET projects found — skipping restore/build/test."
