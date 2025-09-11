@@ -1,0 +1,10 @@
+{
+  "ConnectionStrings": {
+    "Default": "Server=localhost;Database=BudgetWise;Trusted_Connection=True;TrustServerCertificate=True"
+  },
+  "Jwt": {
+    "Issuer": "local",
+    "Audience": "local",
+    "Key": "CHANGE_ME"
+  }
+}
