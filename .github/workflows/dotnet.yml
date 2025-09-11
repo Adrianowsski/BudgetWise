@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Zainstaluj .NET 9, poradzi sobie też z projektami net8
+      # Install .NET 9 SDK (zbuduje też projekty targetujące net8)
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
@@ -15,7 +15,7 @@ jobs:
       - name: Show dotnet info
         run: dotnet --info
 
-      # Znajdź tylko projekty NIE-MAUI (czyta zawartość csproj)
+      # Znajdź tylko projekty NIE-MAUI (sprawdzamy zawartość csproj)
       - name: Find non-MAUI .NET projects
         id: findproj
         shell: bash
