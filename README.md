@@ -19,7 +19,7 @@ A **cross-platform** personal finance manager built with **.NET MAUI + Blazor Hy
 * [📄 License](#license)
 
 ---
-
+<a id="key-features"></a>
 ## 🚀 Key Features
 
 * **Authentication**
@@ -42,7 +42,7 @@ A **cross-platform** personal finance manager built with **.NET MAUI + Blazor Hy
   MVVM, DI, Blazor components, Behaviours, MessagingCenter.
 
 ---
-
+<a id="tech-stack"></a>
 ## 🛠 Tech Stack
 
 | Layer              | Technology / Library                              |
@@ -58,6 +58,7 @@ A **cross-platform** personal finance manager built with **.NET MAUI + Blazor Hy
 | **CI/CD**          | GitHub Actions (Android & iOS build, tests, lint) |
 
 ---
+<a id="project-structure"></a>
 
 ## 🏗 Project Structure
 
@@ -76,11 +77,11 @@ BudgetWise.sln
 ```
 
 ---
-
+<a id="installation--setup"></a>
 ## ⚙️ Installation & Setup
 
 > **Tip:** The solution runs fully offline. Start the API first, then the mobile app.
-
+<a id="backend-web-api"></a>
 ### Backend (Web API)
 
 ```bash
@@ -101,7 +102,7 @@ dotnet run -c Release
 ```
 
 Connection string sits in **appsettings.json**; default is `(localdb)\\MSSQLLocalDB`.
-
+<a id="mobile-app"></a>
 ### Mobile App
 
 ```bash
@@ -124,7 +125,7 @@ dotnet build -f net8.0-android    # or net8.0-ios
 > **Visual Studio 2022** automatically handles device selection & hot reload.
 
 ---
-
+<a id="running-the-app"></a>
 ## ▶️ Running the App
 
 1. **Start API** (`https://localhost:5001`).
@@ -133,7 +134,7 @@ dotnet build -f net8.0-android    # or net8.0-ios
 4. Add transactions, budgets & goals — all data syncs once the device is online again.
 
 ---
-
+<a id="screenshots"></a>
 ## 📸 Screenshots
 
 > Images live in `assets/screenshots/`. Ensure filenames match.
@@ -204,7 +205,7 @@ dotnet build -f net8.0-android    # or net8.0-ios
 | 25 | ![](assets/screenshots/main-drawer.png)     | Main navigation drawer  |
 
 ---
-
+<a id="license"></a>
 ## 📄 License
 
 © 2025 – Released under the [MIT License](LICENSE).
