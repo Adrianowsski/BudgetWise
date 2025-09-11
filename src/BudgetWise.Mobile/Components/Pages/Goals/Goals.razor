@@ -1,0 +1,74 @@
+﻿@page "/goals"
+@using BudgetWise.Mobile.Models
+@using BudgetWise.Mobile.Services
+@inject ApiService ApiService
+
+<CrudComponent TItem="GoalDto"
+               Title="Saving Goals"
+               AddButtonText="Add Goal"
+               Subtitle="Plan and track your savings targets."
+               Items="@goals"
+               ErrorMessage="@error"
+               ShowForm="@showForm"
+               ShowFormChanged="@(v => showForm = v)"
+               OnAdd="PrepareNew"
+               OnEdit="PrepareEdit"
+               OnDelete="ConfirmDelete">
+
+  <RowTemplate Context="g">
+    <div class="pm-row"><div class="pm-label">Title</div><div class="pm-value">@g.Title</div></div>
+    <div class="pm-row"><div class="pm-label">Target</div><div class="pm-value">@($"{g.TargetAmount:N2} {g.Currency}")</div></div>
+    <div class="pm-row"><div class="pm-label">Deadline</div><div class="pm-value">@g.Deadline.ToShortDateString()</div></div>
+  </RowTemplate>
+
+  <FormTemplate Context="g">
+    <GoalForm Goal="g"
+              OnSaved="OnSaved"
+              OnCancelled="()=> showForm = false" />
+  </FormTemplate>
+
+  <EmptyTemplate>
+    <p class="text-center text-secondary">No saving goals set.</p>
+  </EmptyTemplate>
+</CrudComponent>
+
+@code {
+  private List<GoalDto>? goals;
+  private bool showForm;
+  private string? error;
+
+  protected override async Task OnInitializedAsync() => await Load();
+
+  private async Task Load()
+  {
+    try
+    {
+      goals = await ApiService.GetListAsync<GoalDto>("api/savinggoal");
+      error = null;
+    }
+    catch (Exception ex)
+    {
+      error = $"Failed to load goals: {ex.Message}";
+    }
+  }
+
+  private Task PrepareNew() => Task.CompletedTask;
+  private Task PrepareEdit(GoalDto g) => Task.CompletedTask;
+
+  private async Task ConfirmDelete(GoalDto g)
+  {
+    if (!await Confirm("Delete this goal?")) return;
+    if (await ApiService.DeleteAsync($"api/savinggoal/{g.Id}"))
+      await Load();
+    else
+      error = "Error deleting goal.";
+  }
+
+  private async Task OnSaved()
+  {
+    showForm = false;
+    await Load();
+  }
+
+  private Task<bool> Confirm(string _) => Task.FromResult(true);
+}

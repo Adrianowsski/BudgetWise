@@ -1,0 +1,68 @@
+﻿@using BudgetWise.Mobile.Models
+@using BudgetWise.Mobile.Services
+@inject AuthService AuthService
+
+<FormContainer TDto="IncomeDto"
+               Model="Income"
+               ApiEndpoint="api/income"
+               Title="Income"
+               OnSaved="OnSaved"
+               OnCancelled="OnCancelled">
+
+  <div class="mb-3">
+    <label class="form-label">Source</label>
+    <InputText class="form-control"
+               @bind-Value="Income.Source" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Amount</label>
+    <InputNumber class="form-control"
+                 @bind-Value="Income.Amount" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Currency</label>
+    <InputSelect class="form-select"
+                 @bind-Value="Income.Currency">
+      @foreach (var cur in FormContainer<IncomeDto>.Lookups.Currencies)
+      {
+        <option value="@cur">@cur</option>
+      }
+    </InputSelect>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Date</label>
+    <InputDate class="form-control"
+               @bind-Value="Income.Date" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Income Type</label>
+    <InputSelect class="form-select"
+                 @bind-Value="Income.IncomeTypeId">
+      <option value="">-- Select Type --</option>
+      @if (IncomeTypes != null)
+      {
+        @foreach (var t in IncomeTypes)
+        {
+          <option value="@t.Id">@t.Name</option>
+        }
+      }
+    </InputSelect>
+  </div>
+
+</FormContainer>
+
+@code {
+  [Parameter] public IncomeDto Income { get; set; } = new();
+  [Parameter] public EventCallback OnSaved { get; set; }
+  [Parameter] public EventCallback OnCancelled { get; set; }
+
+  private List<IncomeTypeDto>? IncomeTypes;
+
+  protected override async Task OnInitializedAsync()
+  {
+    IncomeTypes = await ApiService.GetListAsync<IncomeTypeDto>("api/incometype");
+    var uid = await AuthService.GetUserIdFromToken();
+    if (uid.HasValue && Income.UserId == 0)
+      Income.UserId = uid.Value;
+  }
+}

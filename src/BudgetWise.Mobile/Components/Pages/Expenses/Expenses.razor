@@ -1,0 +1,76 @@
+﻿@page "/expenses"
+@using BudgetWise.Mobile.Models
+@using BudgetWise.Mobile.Services
+@inject ApiService Api
+
+<CrudComponent TItem="ExpenseDto"
+               Title="Expenses"
+               AddButtonText="Add Expense"
+               Subtitle="Track and categorize your spending."
+               Items="@expenses"
+               ErrorMessage="@error"
+               ShowForm="@showForm"
+               ShowFormChanged="@(v => showForm = v)"
+               OnAdd="PrepareNew"
+               OnEdit="PrepareEdit"
+               OnDelete="ConfirmDelete">
+
+  <RowTemplate Context="e">
+    <div class="pm-row"><div class="pm-label">Description</div><div class="pm-value">@e.Description</div></div>
+    <div class="pm-row"><div class="pm-label">Amount</div><div class="pm-value">@($"{e.Amount:N2} {e.Currency}")</div></div>
+    <div class="pm-row"><div class="pm-label">Date</div><div class="pm-value">@e.Date.ToShortDateString()</div></div>
+    <div class="pm-row"><div class="pm-label">Category</div><div class="pm-value">@e.CategoryName</div></div>
+    <div class="pm-row"><div class="pm-label">Payment</div><div class="pm-value">@e.PaymentMethodName</div></div>
+  </RowTemplate>
+
+  <FormTemplate Context="e">
+    <ExpenseForm Expense="e"
+                 OnSaved="OnSaved"
+                 OnCancelled="()=> showForm = false" />
+  </FormTemplate>
+
+  <EmptyTemplate>
+    <p class="text-center text-secondary">No expenses yet. ➕ Add the first one.</p>
+  </EmptyTemplate>
+</CrudComponent>
+
+@code {
+  private List<ExpenseDto>? expenses;
+  private bool showForm;
+  private string? error;
+
+  protected override async Task OnInitializedAsync() => await Load();
+
+  private async Task Load()
+  {
+    try
+    {
+      expenses = await Api.GetListAsync<ExpenseDto>("api/expense");
+      error = null;
+    }
+    catch (Exception ex)
+    {
+      error = $"Failed to load expenses: {ex.Message}";
+    }
+  }
+
+  private Task PrepareNew() => Task.CompletedTask;
+  private Task PrepareEdit(ExpenseDto e) => Task.CompletedTask;
+
+  private async Task ConfirmDelete(ExpenseDto e)
+  {
+    if (!await Confirm("Delete this expense?")) return;
+    if (await Api.DeleteAsync($"api/expense/{e.Id}"))
+      await Load();
+    else
+      error = "Error deleting expense.";
+  }
+
+  private async Task OnSaved()
+  {
+    showForm = false;
+    await Load();
+  }
+
+  private Task<bool> Confirm(string _) => Task.FromResult(true);
+}

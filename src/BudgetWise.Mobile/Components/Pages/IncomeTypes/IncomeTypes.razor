@@ -1,0 +1,79 @@
+﻿@page "/income-types"
+@using BudgetWise.Mobile.Models
+@using BudgetWise.Mobile.Services
+@inject ApiService ApiService
+
+<CrudComponent TItem="IncomeTypeDto"
+               Title="Income Types"
+               AddButtonText="Add Type"
+               Subtitle="Define and manage your sources of income."
+               Items="@types"
+               ErrorMessage="@error"
+               ShowForm="@showForm"
+               ShowFormChanged="@(v => showForm = v)"
+               OnAdd="PrepareNew"
+               OnEdit="PrepareEdit"
+               OnDelete="ConfirmDelete">
+
+  <RowTemplate Context="t">
+    <div class="pm-row">
+      <div class="pm-label">Name</div>
+      <div class="pm-value">@t.Name</div>
+    </div>
+    <div class="pm-row">
+      <div class="pm-label">Description</div>
+      <div class="pm-value">@t.Description</div>
+    </div>
+  </RowTemplate>
+
+  <FormTemplate Context="t">
+    <IncomeTypeForm Type="t"
+                    OnSaved="OnSaved"
+                    OnCancelled="()=> showForm = false" />
+  </FormTemplate>
+
+  <EmptyTemplate>
+    <p class="text-center text-secondary">No income types defined.</p>
+  </EmptyTemplate>
+</CrudComponent>
+
+@code {
+  private List<IncomeTypeDto>? types;
+  private bool showForm;
+  private string? error;
+
+  protected override async Task OnInitializedAsync() => await Load();
+
+  private async Task Load()
+  {
+    try
+    {
+      types = await ApiService.GetListAsync<IncomeTypeDto>("api/incometype");
+      error = null;
+    }
+    catch (Exception ex)
+    {
+      error = $"Failed to load income types: {ex.Message}";
+    }
+  }
+
+  private Task PrepareNew() => Task.CompletedTask;
+  private Task PrepareEdit(IncomeTypeDto t) => Task.CompletedTask;
+
+  private async Task ConfirmDelete(IncomeTypeDto t)
+  {
+    if (!await Confirm("Delete this type?")) return;
+    if (await ApiService.DeleteAsync($"api/incometype/{t.Id}"))
+      await Load();
+    else
+      error = "Error deleting income type.";
+  }
+
+  private async Task OnSaved()
+  {
+    showForm = false;
+    await Load();
+  }
+
+  private Task<bool> Confirm(string _) => Task.FromResult(true);
+}

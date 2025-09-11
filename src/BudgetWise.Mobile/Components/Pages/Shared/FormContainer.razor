@@ -1,0 +1,96 @@
+﻿@using BudgetWise.Mobile.Services
+@typeparam TDto
+@inject ApiService Api
+@inject AuthService AuthService
+
+<EditForm Model="Model"
+          OnValidSubmit="HandleSubmit"
+          class="p-3 shadow-sm rounded bg-white">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  @* nagłówek: Add vs Edit *@
+  <h4>
+    @(
+       // zakładamy, że TDto ma właściwość Id typu int
+       (int?)typeof(TDto).GetProperty("Id")!.GetValue(Model) == 0
+        ? $"Add {Title}"
+        : $"Edit {Title}"
+    )
+  </h4>
+  
+  @ChildContent
+
+  <div class="d-flex justify-content-end">
+    <button type="submit" class="btn btn-success me-2">
+      💾 @(IsNew ? "Create" : "Save")
+    </button>
+    <button type="button"
+            class="btn btn-secondary"
+            @onclick="()=>OnCancelled.InvokeAsync()">
+      ❌ Cancel
+    </button>
+  </div>
+
+  @if (!string.IsNullOrEmpty(ErrorMessage))
+  {
+    <div class="alert alert-danger mt-2">@ErrorMessage</div>
+  }
+</EditForm>
+
+@code {
+  [Parameter] public TDto Model { get; set; } = Activator.CreateInstance<TDto>();
+  [Parameter] public string ApiEndpoint { get; set; } = "";
+  [Parameter] public string Title       { get; set; } = typeof(TDto).Name;
+  [Parameter] public EventCallback OnSaved     { get; set; }
+  [Parameter] public EventCallback OnCancelled { get; set; }
+  [Parameter] public RenderFragment ChildContent { get; set; }
+
+  protected string? ErrorMessage;
+
+  // wspólne lookupy
+  public static class Lookups
+  {
+    public static readonly string[] Currencies  = { "PLN", "EUR", "USD", "GBP", "CHF" };
+    public static readonly string[] Frequencies = { "Daily", "Weekly", "Monthly", "Quarterly", "Yearly" };
+  }
+
+  bool IsNew =>
+    (int?)typeof(TDto).GetProperty("Id")!.GetValue(Model) == 0;
+
+  protected override async Task OnInitializedAsync()
+  {
+    // ustawiamy UserId, jeśli istnieje
+    var uid = await AuthService.GetUserIdFromToken();
+    if (uid.HasValue)
+    {
+      var prop = typeof(TDto).GetProperty("UserId");
+      if (prop is not null && Convert.ToInt32(prop.GetValue(Model)) == 0)
+        prop.SetValue(Model, uid.Value);
+    }
+  }
+
+  private async Task HandleSubmit()
+  {
+    // ponownie upewniamy się, że UserId jest ustawiony
+    var uid = await AuthService.GetUserIdFromToken();
+    if (uid.HasValue)
+    {
+      var prop = typeof(TDto).GetProperty("UserId");
+      if (prop is not null && Convert.ToInt32(prop.GetValue(Model)) == 0)
+        prop.SetValue(Model, uid.Value);
+    }
+
+    // wybieramy POST albo PUT
+    var idProp = typeof(TDto).GetProperty("Id")!;
+    var idValue = (int?)idProp.GetValue(Model);
+    bool ok = idValue == 0
+      ? await Api.PostAsync(ApiEndpoint, Model)
+      : await Api.PutAsync($"{ApiEndpoint}/{idValue}", Model);
+
+    if (ok)
+      await OnSaved.InvokeAsync();
+    else
+      ErrorMessage = "Failed to save.";
+  }
+}

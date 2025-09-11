@@ -1,0 +1,85 @@
+﻿@using BudgetWise.Mobile.Models
+@using BudgetWise.Mobile.Services
+@inject AuthService AuthService
+
+<FormContainer TDto="ExpenseDto"
+               Model="Expense"
+               ApiEndpoint="api/expense"
+               Title="Expense"
+               OnSaved="OnSaved"
+               OnCancelled="OnCancelled">
+
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <InputText class="form-control"
+               @bind-Value="Expense.Description" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Amount</label>
+    <InputNumber class="form-control"
+                 @bind-Value="Expense.Amount" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Currency</label>
+    <InputSelect class="form-select"
+                 @bind-Value="Expense.Currency">
+      @foreach (var cur in FormContainer<ExpenseDto>.Lookups.Currencies)
+      {
+        <option value="@cur">@cur</option>
+      }
+    </InputSelect>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Date</label>
+    <InputDate class="form-control"
+               @bind-Value="Expense.Date" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Category</label>
+    <InputSelect class="form-select"
+                 @bind-Value="Expense.ExpenseCategoryId">
+      <option value="">-- Select Category --</option>
+      @if (Categories != null)
+      {
+        @foreach (var c in Categories)
+        {
+          <option value="@c.Id">@($"{c.Icon} {c.Name}")</option>
+        }
+      }
+    </InputSelect>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Payment Method</label>
+    <InputSelect class="form-select"
+                 @bind-Value="Expense.PaymentMethodId">
+      <option value="">-- Select Method --</option>
+      @if (PaymentMethods != null)
+      {
+        @foreach (var m in PaymentMethods)
+        {
+          <option value="@m.Id">@m.Name</option>
+        }
+      }
+    </InputSelect>
+  </div>
+
+</FormContainer>
+
+@code {
+  [Parameter] public ExpenseDto Expense { get; set; } = new();
+  [Parameter] public EventCallback OnSaved { get; set; }
+  [Parameter] public EventCallback OnCancelled { get; set; }
+
+  private List<ExpenseCategoryDto>? Categories;
+  private List<PaymentMethodDto>?   PaymentMethods;
+
+  protected override async Task OnInitializedAsync()
+  {
+    Categories     = await ApiService.GetListAsync<ExpenseCategoryDto>("api/expensecategory");
+    PaymentMethods = await ApiService.GetListAsync<PaymentMethodDto>("api/paymentmethod");
+
+    var uid = await AuthService.GetUserIdFromToken();
+    if (uid.HasValue && Expense.UserId == 0)
+      Expense.UserId = uid.Value;
+  }
+}
