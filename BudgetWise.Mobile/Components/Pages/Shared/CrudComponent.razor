@@ -1,0 +1,109 @@
+﻿@namespace BudgetWise.Mobile.Components.Pages.Shared
+@typeparam TItem
+
+<div class="pm-container">
+  <div class="pm-header">
+    <h1>@Title</h1>
+    @if (OnAdd.HasDelegate)
+    {
+      <button class="pm-btn-add" @onclick="Add">
+        <i class="fas fa-plus"></i> @AddButtonText
+      </button>
+    }
+  </div>
+
+  @if (!string.IsNullOrEmpty(Subtitle))
+  {
+    <p class="pm-subtitle">@Subtitle</p>
+  }
+
+  @if (!string.IsNullOrEmpty(ErrorMessage))
+  {
+    <div class="pm-alert">@ErrorMessage</div>
+  }
+  else if (Items == null)
+  {
+    <p class="pm-loading">Loading…</p>
+  }
+  else
+  {
+    @* Modal *@
+    @if (ShowForm)
+    {
+      <div class="pm-modal-backdrop" @onclick="CloseForm">
+        <div class="pm-modal" @onclick:stopPropagation="true">
+          @FormTemplate(CurrentItem!)
+        </div>
+      </div>
+    }
+
+    @* Lista kart *@
+    <div class="pm-cards">
+      @foreach (var item in Items)
+      {
+        <div class="pm-card">
+          @RowTemplate(item)
+          <div class="pm-row pm-row--actions">
+            <div class="pm-label">Actions</div>
+            <div class="pm-actions">
+              <button class="pm-action-btn pm-edit" title="Edit" @onclick="() => Edit(item)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="pm-action-btn pm-delete" title="Delete" @onclick="() => Delete(item)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+      @if (!Items.Any() && EmptyTemplate != null)
+      {
+        @EmptyTemplate
+      }
+    </div>
+  }
+</div>
+
+@code {
+  [Parameter] public string Title { get; set; } = "";
+  [Parameter] public string AddButtonText { get; set; } = "Add";
+  [Parameter] public string? Subtitle { get; set; }
+
+  [Parameter] public IEnumerable<TItem>? Items { get; set; }
+  [Parameter] public RenderFragment<TItem> RowTemplate  { get; set; } = default!;
+  [Parameter] public RenderFragment<TItem> FormTemplate { get; set; } = default!;
+  [Parameter] public RenderFragment? EmptyTemplate      { get; set; }
+
+  [Parameter] public EventCallback OnAdd               { get; set; }
+  [Parameter] public EventCallback<TItem> OnEdit       { get; set; }
+  [Parameter] public EventCallback<TItem> OnDelete     { get; set; }
+
+  [Parameter] public string? ErrorMessage              { get; set; }
+
+  [Parameter] public bool ShowForm                     { get; set; }
+  [Parameter] public EventCallback<bool> ShowFormChanged { get; set; }
+
+  private TItem? CurrentItem;
+
+  private async Task Add()
+  {
+    CurrentItem = Activator.CreateInstance<TItem>();
+    await ShowFormChanged.InvokeAsync(true);
+    if (OnAdd.HasDelegate) await OnAdd.InvokeAsync();
+  }
+
+  private async Task Edit(TItem item)
+  {
+    CurrentItem = item;
+    await ShowFormChanged.InvokeAsync(true);
+    if (OnEdit.HasDelegate) await OnEdit.InvokeAsync(item);
+  }
+
+  private async Task Delete(TItem item)
+  {
+    if (OnDelete.HasDelegate) await OnDelete.InvokeAsync(item);
+  }
+
+  private async Task CloseForm()
+    => await ShowFormChanged.InvokeAsync(false);
+}

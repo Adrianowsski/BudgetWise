@@ -1,0 +1,151 @@
+﻿
+/* Global Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* Layout */
+.layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Navbar - styl mobilny */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #303030; /* Taki sam kolor jak sidebar */
+    color: white;
+    height: 62px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1100;
+}
+
+.navbar h4 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+/* Toggle Button - Po prawej stronie */
+.navbar .toggle-button {
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+/* Ukryj przycisk otwierania sidebaru po otwarciu */
+.navbar .toggle-button.hidden {
+    display: none;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background-color: #303030; /* Taki sam kolor jak navbar */
+    color: white;
+    padding: 1rem;
+    position: fixed;
+    height: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sidebar h4 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Linki nawigacyjne */
+.sidebar .nav-link {
+    color: #ccc;
+    padding: 0.8rem;
+    margin: 0.2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: #495057;
+    color: #00e676;
+}
+
+/* Przycisk wylogowania */
+.sidebar .btn-logout {
+    width: 100%;
+    margin-top: 10px;
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    padding: 0.6rem;
+    border-radius: 6px;
+}
+
+.sidebar .btn-logout:hover {
+    background-color: #c62828;
+}
+
+/* Przycisk zamykania sidebaru */
+.sidebar .btn-close {
+    background-color: #495057;
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 0;
+    padding: 1rem;
+    width: 100%;
+    margin-top: 56px;
+    overflow-y: auto;
+    background-color: #f5f5f5;
+}
+
+/* Mobilna responsywność */
+@media (max-width: 480px) {
+    .navbar h4 {
+        font-size: 1rem;
+    }
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .sidebar .nav-link {
+        font-size: 1rem;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+    }
+}

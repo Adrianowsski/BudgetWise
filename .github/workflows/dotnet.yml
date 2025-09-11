@@ -1,20 +1,51 @@
 name: .NET CI
 on: [push, pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Install .NET 9 SDK (zbuduje też projekty targetujące net8)
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
-      - run: dotnet --info
-      - name: Restore
-        run: dotnet restore
-      - name: Build (skip MAUI)
+          dotnet-version: '9.0.x'
+
+      - name: Show dotnet info
+        run: dotnet --info
+
+      # Znajdź tylko projekty NIE-MAUI (sprawdzamy zawartość csproj)
+      - name: Find non-MAUI .NET projects
+        id: findproj
+        shell: bash
         run: |
-          find . -name "*.csproj" -not -path "*/bin/*" -not -path "*/obj/*" \
-            | grep -iv "maui" \
-            | xargs -I {} dotnet build {} -c Release --no-restore
+          mapfile -t ALL < <(git ls-files '*.csproj' || true)
+          > projects.txt
+          COUNT=0
+          for p in "${ALL[@]}"; do
+            if grep -q '<UseMaui>true</UseMaui>' "$p"; then
+              echo "skip (MAUI): $p"
+            else
+              echo "$p" >> projects.txt
+              echo "build: $p"
+              COUNT=$((COUNT+1))
+            fi
+          done
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
+      - name: Restore
+        if: steps.findproj.outputs.count != '0'
+        run: xargs -a projects.txt -I {} dotnet restore "{}"
+
+      - name: Build
+        if: steps.findproj.outputs.count != '0'
+        run: xargs -a projects.txt -I {} dotnet build "{}" -c Release --no-restore --nologo
+
       - name: Test (if any)
+        if: steps.findproj.outputs.count != '0'
         run: dotnet test -c Release --no-build || echo "No tests yet"
+
+      - name: Skip note (no server-side projects found)
+        if: steps.findproj.outputs.count == '0'
+        run: echo "No server-side .NET projects found — skipping."

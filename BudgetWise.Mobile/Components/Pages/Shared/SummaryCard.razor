@@ -1,0 +1,14 @@
+﻿@namespace BudgetWise.Mobile.Shared
+@inherits Microsoft.AspNetCore.Components.ComponentBase
+
+<div class="card summary-card">
+    <div class="card-body">
+        <h6 class="card-title mb-1">@Title</h6>
+        <p class="card-text h4 mb-0">@Value</p>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public string Value { get; set; } = "";
+}

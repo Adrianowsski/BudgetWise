@@ -1,0 +1,28 @@
+﻿@using BudgetWise.Mobile.Models
+@using BudgetWise.Mobile.Services
+
+<FormContainer TDto="IncomeTypeDto"
+               Model="Type"
+               ApiEndpoint="api/incometype"
+               Title="Income Type"
+               OnSaved="OnSaved"
+               OnCancelled="OnCancelled">
+
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <InputText class="form-control"
+                   @bind-Value="Type.Name" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <InputText class="form-control"
+                   @bind-Value="Type.Description" />
+    </div>
+
+</FormContainer>
+
+@code {
+    [Parameter] public IncomeTypeDto Type { get; set; } = new();
+    [Parameter] public EventCallback OnSaved { get; set; }
+    [Parameter] public EventCallback OnCancelled { get; set; }
+}

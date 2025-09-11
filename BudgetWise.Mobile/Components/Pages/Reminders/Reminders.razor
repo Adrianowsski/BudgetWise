@@ -1,0 +1,79 @@
+﻿@page "/reminders"
+@using BudgetWise.Mobile.Models
+@using BudgetWise.Mobile.Services
+@inject ApiService ApiService
+
+<CrudComponent TItem="ReminderDto"
+               Title="Reminders"
+               AddButtonText="Add Reminder"
+               Subtitle="Keep track of your upcoming tasks."
+               Items="@reminders"
+               ErrorMessage="@error"
+               ShowForm="@showForm"
+               ShowFormChanged="@(v => showForm = v)"
+               OnAdd="PrepareNew"
+               OnEdit="PrepareEdit"
+               OnDelete="ConfirmDelete">
+
+  <RowTemplate Context="r">
+    <div class="pm-row">
+      <div class="pm-label">Message</div>
+      <div class="pm-value">@r.Message</div>
+    </div>
+    <div class="pm-row">
+      <div class="pm-label">Remind At</div>
+      <div class="pm-value">@r.RemindAt.ToString("g")</div>
+    </div>
+  </RowTemplate>
+
+  <FormTemplate Context="r">
+    <ReminderForm Reminder="r"
+                  OnSaved="OnSaved"
+                  OnCancelled="()=> showForm = false" />
+  </FormTemplate>
+
+  <EmptyTemplate>
+    <p class="text-center text-secondary">No reminders set.</p>
+  </EmptyTemplate>
+</CrudComponent>
+
+@code {
+  private List<ReminderDto>? reminders;
+  private bool showForm;
+  private string? error;
+
+  protected override async Task OnInitializedAsync() => await Load();
+
+  private async Task Load()
+  {
+    try
+    {
+      reminders = await ApiService.GetListAsync<ReminderDto>("api/reminder");
+      error = null;
+    }
+    catch (Exception ex)
+    {
+      error = $"Failed to load reminders: {ex.Message}";
+    }
+  }
+
+  private Task PrepareNew() => Task.CompletedTask;
+  private Task PrepareEdit(ReminderDto r) => Task.CompletedTask;
+
+  private async Task ConfirmDelete(ReminderDto r)
+  {
+    if (!await Confirm("Delete this reminder?")) return;
+    if (await ApiService.DeleteAsync($"api/reminder/{r.Id}"))
+      await Load();
+    else
+      error = "Error deleting reminder.";
+  }
+
+  private async Task OnSaved()
+  {
+    showForm = false;
+    await Load();
+  }
+
+  private Task<bool> Confirm(string _) => Task.FromResult(true);
+}
