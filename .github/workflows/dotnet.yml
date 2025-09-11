@@ -7,22 +7,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Zainstaluj .NET 9, poradzi sobie też z projektami net8
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Show dotnet info
         run: dotnet --info
 
-      - name: Find .NET projects (excluding MAUI)
+      # Znajdź tylko projekty NIE-MAUI (czyta zawartość csproj)
+      - name: Find non-MAUI .NET projects
         id: findproj
         shell: bash
         run: |
-          mapfile -t PROJS < <(git ls-files '*.csproj' | grep -iv 'maui' || true)
-          echo "count=${#PROJS[@]}" >> "$GITHUB_OUTPUT"
-          printf "%s\n" "${PROJS[@]}" > projects.txt || true
-          echo "Found ${#PROJS[@]} projects:"
-          cat projects.txt || true
+          mapfile -t ALL < <(git ls-files '*.csproj' || true)
+          > projects.txt
+          COUNT=0
+          for p in "${ALL[@]}"; do
+            if grep -q '<UseMaui>true</UseMaui>' "$p"; then
+              echo "skip (MAUI): $p"
+            else
+              echo "$p" >> projects.txt
+              echo "build: $p"
+              COUNT=$((COUNT+1))
+            fi
+          done
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
 
       - name: Restore
         if: steps.findproj.outputs.count != '0'
@@ -36,6 +46,6 @@ jobs:
         if: steps.findproj.outputs.count != '0'
         run: dotnet test -c Release --no-build || echo "No tests yet"
 
-      - name: Skip note (no .NET projects yet)
+      - name: Skip note (no server-side projects found)
         if: steps.findproj.outputs.count == '0'
-        run: echo "No .NET projects found — skipping restore/build/test."
+        run: echo "No server-side .NET projects found — skipping."
