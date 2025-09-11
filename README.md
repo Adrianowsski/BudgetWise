@@ -212,5 +212,3 @@ dotnet build -f net8.0-android    # or net8.0-ios
 ---
 
 *Update badges, URLs & connection strings to your environment before pushing to GitHub.*
-::contentReference[oaicite:0]{index=0}
-
