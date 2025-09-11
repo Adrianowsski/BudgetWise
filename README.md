@@ -1,44 +1,43 @@
-[![.NET](https://img.shields.io/badge/.NET-8.0-purple)](https://dotnet.microsoft.com/) [![MAUI](https://img.shields.io/badge/.NET_MAUI-Cross--Platform-brightgreen)](https://learn.microsoft.com/dotnet/maui) [![Blazor](https://img.shields.io/badge/Blazor-Hybrid-9cf)](https://learn.microsoft.com/aspnet/core/blazor/hybrid) [![Build Status](https://img.shields.io/github/actions/workflow/status/yourusername/BudgetWise/ci.yml?branch=main)](https://github.com/yourusername/BudgetWise/actions) [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-8.0-purple)](https://dotnet.microsoft.com/) [![MAUI](https://img.shields.io/badge/.NET_MAUI-Cross--Platform-brightgreen)](https://learn.microsoft.com/dotnet/maui) [![Blazor](https://img.shields.io/badge/Blazor-Hybrid-9cf)](https://learn.microsoft.com/aspnet/core/blazor/hybrid) [![Build](https://github.com/Adrianowsski/BudgetWise/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Adrianowsski/BudgetWise/actions) [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 # 💰 BudgetWise
 
-A **cross‑platform** personal finance manager built with **.NET MAUI + Blazor Hybrid**. Track expenses & income, set budgets, manage subscriptions, and hit your savings goals — online *or* completely offline with seamless API sync.
+A **cross-platform** personal finance manager built with **.NET MAUI + Blazor Hybrid**. Track expenses & income, set budgets, manage subscriptions, and hit your savings goals — online *or* completely offline with seamless API sync.
 
 ---
 
 ## 📌 Table of Contents
 
-* [🚀 Key Features](#🚀-key-features)
-* [🛠 Tech Stack](#🛠-tech-stack)
-* [🏗 Project Structure](#🏗-project-structure)
-* [⚙️ Installation & Setup](#⚙️-installation--setup)
-
-  * [Backend (Web API)](#backend-web-api)
+* [🚀 Key Features](#key-features)
+* [🛠 Tech Stack](#tech-stack)
+* [🏗 Project Structure](#project-structure)
+* [⚙️ Installation & Setup](#installation--setup)
+  * [Backend (Web API)](#backend-web-api)
   * [Mobile App](#mobile-app)
-* [▶️ Running the App](#▶️-running-the-app)
-* [📸 Screenshots](#📸-screenshots)
-* [📄 License](#📄-license)
+* [▶️ Running the App](#running-the-app)
+* [📸 Screenshots](#screenshots)
+* [📄 License](#license)
 
 ---
 
 ## 🚀 Key Features
 
 * **Authentication**
-  ASP.NET Core Identity + IdentityServer4 (JWT) for secure sign‑up / login.
+  ASP.NET Core Identity + IdentityServer4 (JWT) for secure sign-up / login.
 * **Dashboard**
-  Summary KPI cards, *Income vs Expenses* line chart, category pie chart, active subscriptions.
+  Summary KPI cards, *Income vs Expenses* line chart, category pie chart, active subscriptions.
 * **Transactions CRUD**
   Filterable, sortable *Expenses* & *Incomes* with rich add/edit modals.
 * **Monthly Budgets**
-  Per‑category limits with live usage bars.
+  Per-category limits with live usage bars.
 * **Custom Categories & Types**
-  User‑defined expense categories (with emoji) & income types.
+  User-defined expense categories (with emoji) & income types.
 * **Savings Goals**
   Target amounts + deadlines, progress visualisation.
 * **Subscriptions & Reminders**
   Manage recurring charges and receive local notifications.
-* **Offline‑First & Sync**
-  SecureStorage caching, Polly retry/circuit‑breaker, RESTful sync to SQL‑backed API.
+* **Offline-First & Sync**
+  SecureStorage caching, Polly retry/circuit-breaker, RESTful sync to SQL-backed API.
 * **Clean Architecture**
   MVVM, DI, Blazor components, Behaviours, MessagingCenter.
 
@@ -48,12 +47,12 @@ A **cross‑platform** personal finance manager built with **.NET MAUI + Blazor
 
 | Layer              | Technology / Library                              |
 | ------------------ | ------------------------------------------------- |
-| **Mobile UI**      | .NET MAUI + Blazor Hybrid, C#                     |
-| **State & DI**     | CommunityToolkit.Mvvm, Microsoft Extensions DI    |
-| **Charts & Icons** | Microcharts, FontAwesome / Material Icons         |
+| **Mobile UI**      | .NET MAUI + Blazor Hybrid, C#                     |
+| **State & DI**     | CommunityToolkit.Mvvm, Microsoft Extensions DI    |
+| **Charts & Icons** | Microcharts, FontAwesome / Material Icons         |
 | **Storage**        | SecureStorage, Preferences                        |
-| **Backend API**    | ASP.NET Core 9 + EF Core 9, SQL Server            |
-| **Auth**           | IdentityServer4, ASP.NET Core Identity, JWT       |
+| **Backend API**    | ASP.NET Core 9 + EF Core 9, SQL Server            |
+| **Auth**           | IdentityServer4, ASP.NET Core Identity, JWT       |
 | **Networking**     | HttpClientFactory + Polly                         |
 | **Testing**        | xUnit, Moq, FluentAssertions                      |
 | **CI/CD**          | GitHub Actions (Android & iOS build, tests, lint) |
@@ -69,10 +68,11 @@ BudgetWise.sln
 │  ├─ Mobile/                       # .NET MAUI Blazor app
 │  │   ├─ BudgetWise.Mobile/        # UI, ViewModels, services
 │  │   └─ BudgetWise.Mobile.Tests/  # UI tests
-│  └─ Backend/                      # ASP.NET Core 9 Web API
+│  └─ Backend/                      # ASP.NET Core 9 Web API
 │      ├─ BudgetWise.Api/
 │      └─ BudgetWise.Infrastructure/ # EF Core migrations & seeders
 └─ build/                           # GitHub Actions & Docker files
+
 ```
 
 ---
@@ -85,7 +85,7 @@ BudgetWise.sln
 
 ```bash
 # Clone repository
-git clone https://github.com/YourUsername/BudgetWise.git
+git clone https://github.com/Adrianowsski/BudgetWise.git
 cd BudgetWise/src/Backend
 
 # Restore & build
@@ -97,6 +97,7 @@ dotnet ef database update
 
 # Run API (https://localhost:5001)
 dotnet run -c Release
+
 ```
 
 Connection string sits in **appsettings.json**; default is `(localdb)\\MSSQLLocalDB`.
@@ -117,6 +118,7 @@ dotnet build -f net8.0-android    # or net8.0-ios
 # Deploy
 #  Android Emulator:      dotnet maui deploy -f net8.0-android
 #  iOS Simulator (macOS): dotnet maui deploy -f net8.0-ios
+
 ```
 
 > **Visual Studio 2022** automatically handles device selection & hot reload.
@@ -210,3 +212,5 @@ dotnet build -f net8.0-android    # or net8.0-ios
 ---
 
 *Update badges, URLs & connection strings to your environment before pushing to GitHub.*
+::contentReference[oaicite:0]{index=0}
+
