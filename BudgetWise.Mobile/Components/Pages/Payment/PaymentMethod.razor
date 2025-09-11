@@ -1,0 +1,83 @@
+﻿@page "/payment-methods"
+@using BudgetWise.Mobile.Models
+@using BudgetWise.Mobile.Services
+@inject ApiService ApiService
+
+<CrudComponent TItem="PaymentMethodDto"
+               Title="Payment Methods"
+               AddButtonText="Add Method"
+               Subtitle="Manage how you pay for your expenses."
+               Items="@methods"
+               ErrorMessage="@error"
+               ShowForm="@showForm"
+               ShowFormChanged="@(v => showForm = v)"
+               OnAdd="PrepareNew"
+               OnEdit="PrepareEdit"
+               OnDelete="ConfirmDelete">
+
+  <RowTemplate Context="m">
+    <div class="pm-row">
+      <div class="pm-label">Name</div>
+      <div class="pm-value">@m.Name</div>
+    </div>
+    <div class="pm-row">
+      <div class="pm-label">Type</div>
+      <div class="pm-value">@m.Type</div>
+    </div>
+    <div class="pm-row">
+      <div class="pm-label">Provider</div>
+      <div class="pm-value">@m.Provider</div>
+    </div>
+  </RowTemplate>
+
+  <FormTemplate Context="m">
+    <PaymentMethodForm Method="m"
+                       OnSaved="OnSaved"
+                       OnCancelled="()=> showForm = false" />
+  </FormTemplate>
+
+  <EmptyTemplate>
+    <p class="text-center text-secondary">No payment methods defined.</p>
+  </EmptyTemplate>
+</CrudComponent>
+
+@code {
+  private List<PaymentMethodDto>? methods;
+  private bool showForm;
+  private string? error;
+
+  protected override async Task OnInitializedAsync() => await Load();
+
+  private async Task Load()
+  {
+    try
+    {
+      methods = await ApiService.GetListAsync<PaymentMethodDto>("api/paymentmethod");
+      error = null;
+    }
+    catch (Exception ex)
+    {
+      error = $"Failed to load payment methods: {ex.Message}";
+    }
+  }
+
+  private Task PrepareNew() => Task.CompletedTask;
+  private Task PrepareEdit(PaymentMethodDto m) => Task.CompletedTask;
+
+  private async Task ConfirmDelete(PaymentMethodDto m)
+  {
+    if (!await Confirm("Delete this payment method?")) return;
+    if (await ApiService.DeleteAsync($"api/paymentmethod/{m.Id}"))
+      await Load();
+    else
+      error = "Error deleting payment method.";
+  }
+
+  private async Task OnSaved()
+  {
+    showForm = false;
+    await Load();
+  }
+
+  private Task<bool> Confirm(string _) => Task.FromResult(true);
+}

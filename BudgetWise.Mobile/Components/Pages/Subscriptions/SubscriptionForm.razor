@@ -1,0 +1,92 @@
+﻿@using BudgetWise.Mobile.Models
+@using BudgetWise.Mobile.Services
+@inject ApiService Api
+@inject AuthService AuthService
+
+<FormContainer TDto="RecurringExpenseDto"
+               Model="Subscription"
+               ApiEndpoint="api/recurringexpense"
+               Title="Subscription"
+               OnSaved="OnSaved"
+               OnCancelled="OnCancelled">
+
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <InputText class="form-control"
+                   @bind-Value="Subscription.Title" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Amount</label>
+        <InputNumber class="form-control"
+                     @bind-Value="Subscription.Amount" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Currency</label>
+        <InputSelect class="form-select"
+                     @bind-Value="Subscription.Currency">
+          @foreach (var cur in FormContainer<RecurringExpenseDto>.Lookups.Currencies)
+          {
+            <option value="@cur">@cur</option>
+          }
+        </InputSelect>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Frequency</label>
+        <InputSelect class="form-select"
+                     @bind-Value="Subscription.Frequency">
+          @foreach (var f in FormContainer<RecurringExpenseDto>.Lookups.Frequencies)
+          {
+            <option value="@f">@f</option>
+          }
+        </InputSelect>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Category</label>
+        <InputSelect class="form-select"
+                     @bind-Value="Subscription.ExpenseCategoryId">
+          <option value="">-- Select Category --</option>
+          @if (Categories != null)
+          {
+            @foreach (var c in Categories)
+            {
+              <option value="@c.Id">@($"{c.Icon} {c.Name}")</option>
+            }
+          }
+        </InputSelect>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Payment Method</label>
+        <InputSelect class="form-select"
+                     @bind-Value="Subscription.PaymentMethodId">
+          <option value="">-- Select Method --</option>
+          @if (PaymentMethods != null)
+          {
+            @foreach (var m in PaymentMethods)
+            {
+              <option value="@m.Id">@m.Name</option>
+            }
+          }
+        </InputSelect>
+    </div>
+
+</FormContainer>
+
+@code {
+    [Parameter] public RecurringExpenseDto Subscription { get; set; } = new();
+    [Parameter] public EventCallback OnSaved     { get; set; }
+    [Parameter] public EventCallback OnCancelled { get; set; }
+
+    private List<ExpenseCategoryDto>? Categories;
+    private List<PaymentMethodDto>?   PaymentMethods;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories     = await Api.GetListAsync<ExpenseCategoryDto>("api/expensecategory");
+        PaymentMethods = await Api.GetListAsync<PaymentMethodDto>("api/paymentmethod");
+    }
+}
