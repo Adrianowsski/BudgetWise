@@ -1,4 +1,4 @@
-[![.NET](https://img.shields.io/badge/.NET-8.0-purple)](https://dotnet.microsoft.com/) [![MAUI](https://img.shields.io/badge/.NET_MAUI-Cross--Platform-brightgreen)](https://learn.microsoft.com/dotnet/maui) [![Blazor](https://img.shields.io/badge/Blazor-Hybrid-9cf)](https://learn.microsoft.com/aspnet/core/blazor/hybrid) [![Build](https://github.com/Adrianowsski/BudgetWise/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Adrianowsski/BudgetWise/actions) [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-9.0-purple)](https://dotnet.microsoft.com/) [![MAUI](https://img.shields.io/badge/.NET_MAUI-Cross--Platform-brightgreen)](https://learn.microsoft.com/dotnet/maui) [![Blazor](https://img.shields.io/badge/Blazor-Hybrid-9cf)](https://learn.microsoft.com/aspnet/core/blazor/hybrid) [![Build](https://github.com/Adrianowsski/BudgetWise/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Adrianowsski/BudgetWise/actions) [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 # 💰 BudgetWise
 
